@@ -1,2 +1,2 @@
 [webservers]
-54.90.142.55 ansible_user=devops
+54.90.142.55 ansible_user=devops host_key_checking = False 
