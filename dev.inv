@@ -1,2 +1,2 @@
 [webservers]
-54.90.142.55 ansible_user=devops ansible_pass=today@1234 
+54.90.142.55 ansible_user=devops
