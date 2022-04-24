@@ -2,8 +2,8 @@
 - hosts: webservers
   become: yes
   vars: 
-     dockerceversion: 54.90.142.55~3-0~ubuntu-bionic
-     dockercecliversion: 54.90.142.55~3-0~ubuntu-bionic
+     dockerceversion: 5:18.09.9~3-0~ubuntu-bionic
+     dockercecliversion: 5:18.09.9~3-0~ubuntu-bionic
      containerdioversion: 1.2.6-3
   tasks:
     - name: Add Docker GPG key
