@@ -1,2 +1,2 @@
 [webserver]
-3.91.64.59 ansible_user=devops ansible_ssh_pass=today@1234
+54.226.145.52 ansible_user=devops ansible_ssh_pass=today@1234
