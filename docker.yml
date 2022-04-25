@@ -1,41 +1,31 @@
 ---
 - hosts: webservers
-  become: true
+  become: yes
+  vars: 
+     dockerceversion: 5:18.09.9~3-0~ubuntu-bionic
+     dockercecliversion: 5:18.09.9~3-0~ubuntu-bionic
+     containerdioversion: 1.2.6-3
   tasks:
-    - name: Install aptitude using apt
-      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
-
-    - name: Install required system packages
-      apt: name=docker state=latest update_cache=yes
-      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
-
-    - name: Add Docker GPG apt Key
-      apt_key:
+    - name: Add Docker GPG key
+      apt_key: 
         url: https://download.docker.com/linux/ubuntu/gpg
+    - name: Install basic list of packages
+      apt:
+        name: ['apt-transport-https','ca-certificates','curl','gnupg2','software-properties-common']
         state: present
-
-    - name: Add Docker Repository
+        update_cache: yes
+    - name: Add Docker APT repository
       apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+          repo: deb [arch=amd64] https://download.docker.com/linux/{{ansible_distribution|lower}} {{ansible_distribution_release}} stable
+    - name: Install Docker packages
+      apt:
+#        name: "{{ item }}" 
+        name: ['docker-ce={{ dockerceversion }}','docker-ce-cli={{ dockercecliversion }}', 'containerd.io={{ containerdioversion }}']
         state: present
-
-    - name: Update apt and install docker-ce
-      apt: update_cache=yes name=docker-ce state=latest
-
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
-
-    - name: Pull default Docker image
-      docker_image:
-        name: "ubuntu"
-        source: pull
-
-    # Creates the number of containers defined by the variable create_containers, using values from vars file
-    - name: Create default containers
-      docker_container:
-        name: "docker"
-        image: "ubuntu"
-        command: "sleep 1d"
-        state: present
-      with_sequence: count= 1
+#      with_items:
+#            - docker-ce={{ dockerceversion }}
+#            - docker-ce-cli={{ dockercecliversion }}
+#            - containerd.io={{ containerdioversion }}
+#            - docker-ce
+#            - docker-ce-cli
+#            - containerd.io
